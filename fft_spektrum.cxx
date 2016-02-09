@@ -8,12 +8,15 @@
 //-------------------------------
 using namespace std;
 //-------------------------------
+void lies(const int N, double* const p, const char* fname, double& L);
+//-------------------------------
 void writeData(const fftw_complex* const f, const int N, const double L,const char* const fname);
 
 //-------------------------------
 
 int main(int argc, char** argv){
 
+	
 	if(argc != 3){
 		cout << "Usage: " << argv[0] << " input_file \t output_file" << endl;
 		exit(1);
@@ -24,7 +27,7 @@ int main(int argc, char** argv){
 
 	const int N = 16384;
 	double L;
-
+	
 	// Allocate memory
 	fftw_complex* f = (fftw_complex*) fftw_malloc(sizeof(fftw_complex) * (N/2+1));
 	double* inR  = (double*) malloc(sizeof(double)*N);
@@ -33,11 +36,11 @@ int main(int argc, char** argv){
 	fftw_plan FW  = fftw_plan_dft_r2c_1d(N, inR, f, FFTW_ESTIMATE);
 
 	// Read input data
-
+ lies(N,inR,in_file,L);
 	// Call function which reads the data from
 	// the input file into the array inR
 
-
+ cout << L << endl; 
   // Calculate FFT
   fftw_execute(FW);
 
@@ -52,6 +55,18 @@ int main(int argc, char** argv){
 	return 0;
 }
 //-------------------------------
+void lies(const int N, double* const p, const char* fname,double& L){
+ ifstream in(fnamel);
+double temp;
+for(int i=0;i<N;i++){
+ in >> temp;
+ in >> p[i];
+}
+L = temp;
+in.close();
+  
+}
+//---------------------------------
 void writeData(const fftw_complex* const f, const int N, const double L,const char* const fname){
 	ofstream out(fname);
 	const double dk = 2*M_PI/L;
